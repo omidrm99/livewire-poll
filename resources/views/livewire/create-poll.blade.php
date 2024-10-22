@@ -3,7 +3,7 @@
         <label>
             Poll Title
         </label>
-        <input type="text" wire:model="title" />
+        <input type="text" wire:model.live="title" />
 
         Current Title : {{ $title }}
     </form>
