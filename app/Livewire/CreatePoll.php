@@ -12,8 +12,21 @@ class CreatePoll extends Component
 {
     public $title;
 
+    public $options = [''];
+
     public function render(): Application|Factory|ViewAlias|View
     {
         return view('livewire.create-poll');
     }
+
+    public function addOption()
+    {
+        $this->options[] = '';
+    }
+
+//    public function mount()
+//    {
+//
+//    }
+
 }
