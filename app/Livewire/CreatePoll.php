@@ -19,7 +19,7 @@ class CreatePoll extends Component
         return view('livewire.create-poll');
     }
 
-    public function addOption()
+    public function addOption(): void
     {
         $this->options[] = '';
     }
