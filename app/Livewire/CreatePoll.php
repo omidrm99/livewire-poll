@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Poll;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View as ViewAlias;
 use Illuminate\Foundation\Application;
@@ -12,7 +13,7 @@ class CreatePoll extends Component
 {
     public $title;
 
-    public $options = [''];
+    public $options= [''];
 
     public function render(): Application|Factory|ViewAlias|View
     {
@@ -23,6 +24,34 @@ class CreatePoll extends Component
     {
         $this->options[] = '';
     }
+
+    public function removeOption($index): void
+    {
+        unset($this->options[$index]);
+        $this->options = array_values($this->options);
+    }
+
+    public function createPoll(): void
+    {
+        $poll = Poll::create([
+            'title' => $this->title,
+        ]);
+
+        // Filter out any options that are either empty or contain only whitespace
+        $filteredOptions = array_filter($this->options, function ($option) {
+            return trim($option) !== '';
+        });
+
+        foreach ($filteredOptions as $optionName) {
+            $poll->options()->create([
+                'name' => $optionName,
+            ]);
+        }
+
+        $this->reset('title', 'options');
+    }
+
+
 
 //    public function mount()
 //    {
