@@ -13,7 +13,16 @@ class CreatePoll extends Component
 {
     public $title;
 
-    public $options= [''];
+    public $options = [''];
+
+    protected $rules = [
+        'title' => 'required|min:3|max:255',
+        'options' => 'required|array|min:1|max:4',
+        'options.*' => 'required|min:1|max:255'
+    ];
+    protected $messages = [
+        'options.*' => "The option can't be empty.",
+    ];
 
     public function render(): Application|Factory|ViewAlias|View
     {
@@ -33,20 +42,14 @@ class CreatePoll extends Component
 
     public function createPoll(): void
     {
-        $poll = Poll::create([
+        $this->validate();
+
+
+        Poll::create([
             'title' => $this->title,
-        ]);
-
-        // Filter out any options that are either empty or contain only whitespace
-        $filteredOptions = array_filter($this->options, function ($option) {
-            return trim($option) !== '';
-        });
-
-        foreach ($filteredOptions as $optionName) {
-            $poll->options()->create([
-                'name' => $optionName,
-            ]);
-        }
+        ])->options()->createMany(
+            collect($this->options)->map(fn($option) => ['name' => $option])->all()
+        );
 
         $this->reset('title', 'options');
     }
