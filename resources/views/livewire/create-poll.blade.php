@@ -1,8 +1,8 @@
 <div>
     <form wire:submit.prevent="createPoll">
-        <label>Poll Title</label>
+        <label>Poll Title: {{ $title }}</label>
 
-        <input type="text" wire:model="title"/>
+        <input type="text" wire:model.live="title"/>
 
         @error('title')
         <div class="text-red-500">{{ $message }}</div>
