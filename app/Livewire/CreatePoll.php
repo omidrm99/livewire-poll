@@ -38,6 +38,7 @@ class CreatePoll extends Component
     {
         $this->validateOnly($propertyName);
     }
+
     public function removeOption($index): void
     {
         unset($this->options[$index]);
@@ -52,7 +53,6 @@ class CreatePoll extends Component
         ])->options()->createMany(
             collect($this->options)->map(fn($option) => ['name' => $option])->all()
         );
-
 //        $poll = Poll::create([
 //            'title' => $this->title,
 //        ]);
@@ -62,5 +62,6 @@ class CreatePoll extends Component
 //            ]);
 //        }
         $this->reset('title', 'options');
+        $this->dispatch('pollCreated');
     }
 }
