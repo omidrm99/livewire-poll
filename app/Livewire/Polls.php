@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Option;
 use App\Models\Poll;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View as ViewAlias;
@@ -15,11 +16,15 @@ class Polls extends Component
         'pollCreated' => 'render'
     ];
 
-
     public function render(): Application|Factory|ViewAlias|View
     {
         $polls = Poll::with('options.votes')
             ->latest()->get();
         return view('livewire.polls', ['polls' => $polls]);
+    }
+    public function vote(int $id): void
+    {
+        $option = Option::findOrFail($id);
+        $option->votes()->create();
     }
 }
